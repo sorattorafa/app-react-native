@@ -1,23 +1,34 @@
-import React, {useState} from 'react'; 
-import { View, KeyboardAvoidingView, Text, Platform, Image, StyleSheet, TextInput, TouchableOpacity } from 'react-native'; 
+import React, {useState, useEffect} from 'react'; 
+import { View, AsyncStorage, KeyboardAvoidingView, Text, Platform, Image, StyleSheet, TextInput, TouchableOpacity } from 'react-native'; 
 import logo from '../../assets/logo.png'; 
 import api from '../services/api'; 
 
-export default function Login(){   
+export default function Login({ navigation }){   
     const [email, setEmail] = useState(''); 
-    const[tech, setTech] = useState(''); 
-
-    async function handleSubmit(){  
+    const [techs, setTechs] = useState(''); 
+ 
+    useEffect(() => {  
+        /*
+        AsyncStorage.getItem('user').then(user => { 
+            if(user){ 
+                navigation.navigate('List');
+            }
+        })  
+        */       
+    }, []); 
+    
+    async function handleSubmit(){   
         // email  
         // console.log(email); 
         // console.log(tech);  
-        {/**
-        const response = await api.post('/sessions', { 
+        const response = await api.post('/users/newuser', { 
             email
         }) 
         const {_id} = response.data; 
-        console.log(_id); 
-         */}
+        //console.log(_id);  
+        await  AsyncStorage.setItem('user', _id); 
+        await  AsyncStorage.setItem('techs', techs); 
+        navigation.navigate('List');
     }
     return <KeyboardAvoidingView enabled={Platform.OS === 'ios'} behavior="padding" style={styles.container}> 
         <Image source={logo}/>  
@@ -40,8 +51,8 @@ export default function Login(){
            placeholderTextColor='#999'   
            autoCapitalize='words' 
            autoCorrect={false} 
-           value={tech} 
-           onChangeText ={setTech}
+           value={techs} 
+           onChangeText ={setTechs}
            />  
            <TouchableOpacity onPress={handleSubmit} style={styles.buttom}> 
             <Text style={styles.buttomText}> Encontrar vagas </Text>

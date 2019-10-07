@@ -10,7 +10,6 @@ const routes = express.Router();
 const upload = multer(uploadConfig); 
 
 routes.post('/users/newuser', SectionController.store);  
-
 routes.post('/spots/newspot', upload.single('thumbnail'), SpotController.store); 
 routes.get('/spots/getspotsbytech', SpotController.index); 
 routes.get('/dashboard', DashboardController.show); 
